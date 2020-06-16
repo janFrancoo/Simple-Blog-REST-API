@@ -14,3 +14,9 @@ class Like(models.Model):
 
     class Meta:
         unique_together = (('by', 'post'),)
+
+class Reply(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    author = models.ForeignKey(User, related_name='replies', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='replies', on_delete=models.CASCADE)

@@ -1,18 +1,19 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from blog.api.models import Like, Post
+from blog.api.models import Like, Post, Reply
 
+class ReplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reply
+        fields = ['id', 'created_at', 'content', 'author', 'post']
 
 class PostSerializer(serializers.ModelSerializer):
-    likes = serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='by'
-     )
+    likes = serializers.SlugRelatedField(many=True, read_only=True, slug_field='by')
+    replies = ReplySerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'created_at', 'title', 'content', 'author', 'likes']
+        fields = ['id', 'created_at', 'title', 'content', 'author', 'likes', 'replies']
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
